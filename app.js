@@ -7,6 +7,8 @@ const myEmitter = new EventEmitter();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const date = new Date();
 
+myEmitter.setMaxListeners(15);
+
 bot.catch((err, ctx) => {
     console.log('ERROR', err);
 });
