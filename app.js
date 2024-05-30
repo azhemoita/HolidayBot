@@ -20,30 +20,28 @@ fs.readFile('./holidays.json', 'utf-8', (err, data) => {
         day: 'numeric',
         month: 'long',
     });
-    const holiday = holidayObj[today];
+
+    const holiday = holidayObj[today] || 'Сегодня нет праздника :(';
 
     bot.start((ctx) => {
+        const today = new Date();
+        const todayToString = today.toLocaleString('ru', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
+
         ctx.reply(
             `Привет, ${ctx.update.message.from.first_name}!\nЭто HolidayBot!\nДля справки введите команду - /help`
         );
-        ctx.reply(
-            `Сегодня ${date.toLocaleString('ru', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-            })}\n${holiday}`
-        );
+
+        ctx.reply(`Сегодня ${todayToString}\n${holiday}`);
+
         let timerId = setInterval(
-            () =>
-                ctx.reply(
-                    `Сегодня ${date.toLocaleString('ru', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                    })}\n${holiday}`
-                ),
+            () => ctx.reply(`Сегодня ${todayToString}\n${holiday}`),
             86400000
         );
+
         myEmitter.on('timer', () => {
             clearInterval(timerId);
         });
