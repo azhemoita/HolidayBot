@@ -1,11 +1,14 @@
-const fs = require('fs');
+'use strict';
 const { EventEmitter } = require('events');
 const { Telegraf } = require('telegraf');
+const cron = require('node-cron');
 require('dotenv').config();
 
 const myEmitter = new EventEmitter();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const date = new Date();
+const chatId = process.env.CHAT_ID;
+const timeGetHoliday = '14:01:50';
 
 myEmitter.setMaxListeners(15);
 
@@ -13,56 +16,28 @@ bot.catch((err, ctx) => {
     console.log('ERROR', err);
 });
 
-fs.readFile('./holidays.json', 'utf-8', (err, data) => {
-    if (err) console.log(err);
-    const holidayObj = JSON.parse(data);
-    const today = date.toLocaleString('ru', {
-        day: 'numeric',
-        month: 'long',
-    });
+const getHolidayUrl = () =>
+    `https://www.calend.ru/img/export/informer_1.png?t=${date.getTime()}`;
 
-    const holiday = holidayObj[today] || 'Сегодня нет праздника :(';
+const sendHoliday = () => {
+    bot.telegram.sendPhoto(chatId, getHolidayUrl());
+};
 
-    bot.start((ctx) => {
-        const today = new Date();
-        const todayToString = today.toLocaleString('ru', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        });
-
-        ctx.reply(
-            `Привет, ${ctx.update.message.from.first_name}!\nЭто HolidayBot!\nДля справки введите команду - /help`
-        );
-
-        ctx.reply(`Сегодня ${todayToString}\n${holiday}`);
-
-        let timerId = setInterval(
-            () => ctx.reply(`Сегодня ${todayToString}\n${holiday}`),
-            86400000
-        );
-
-        myEmitter.on('timer', () => {
-            clearInterval(timerId);
-        });
-    });
+bot.start((ctx) => {
+    ctx.reply(`Сегодня праздник 🎉 \nСправка /help`);
+    sendHoliday();
 });
 
-bot.command(['stop', 'finish'], (ctx) => {
-    myEmitter.emit('timer');
-    ctx.reply(
-        'Бот больше не шлёт сообщения.\nДля запуска бота введите команду - /start'
-    );
-});
+cron.schedule('00 08 * * *', sendHoliday);
 
 bot.help((ctx) =>
     ctx.reply(
-        'Бот каждый день присылает сообщение о том какой сегодня праздник.\n Чтобы остановить бота введите любую из команд: /stop или /finish'
+        'Бот каждый день присылает сообщение в 8:00 утра о том какой сегодня праздник.'
     )
 );
 
 bot.launch()
-    .then((res) => console.log('Started'))
+    .then(() => console.log('Started'))
     .catch((err) => console.log(err));
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
