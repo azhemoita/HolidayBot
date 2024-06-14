@@ -8,37 +8,37 @@ const myEmitter = new EventEmitter();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const date = new Date();
 const chatId = process.env.CHAT_ID;
-const timeGetHoliday = '14:01:50';
 
 myEmitter.setMaxListeners(15);
 
 bot.catch((err, ctx) => {
-    console.log('ERROR', err);
+  console.log('ERROR', err);
 });
 
 const getHolidayUrl = () =>
-    `https://www.calend.ru/img/export/informer_1.png?t=${date.getTime()}`;
+  `https://www.calend.ru/img/export/informer_1.png?t=${date.getTime()}`;
 
 const sendHoliday = () => {
-    bot.telegram.sendPhoto(chatId, getHolidayUrl());
+  bot.telegram.sendPhoto(chatId, getHolidayUrl());
 };
 
 bot.start((ctx) => {
-    ctx.reply(`Сегодня праздник 🎉 \nСправка /help`);
-    sendHoliday();
+  ctx.reply(`Сегодня праздник 🎉 \nСправка /help`);
+  sendHoliday();
 });
 
-cron.schedule('00 08 * * *', sendHoliday);
+cron.schedule('00 01 * * *', sendHoliday);
 
 bot.help((ctx) =>
-    ctx.reply(
-        'Бот каждый день присылает сообщение в 8:00 утра о том какой сегодня праздник.'
-    )
+  ctx.reply(
+    'Бот каждый день присылает сообщение в 8:00 утра о том какой сегодня праздник.'
+  )
 );
 
-bot.launch()
-    .then(() => console.log('Started'))
-    .catch((err) => console.log(err));
+bot
+  .launch()
+  .then(() => console.log('Started'))
+  .catch((err) => console.log(err));
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
