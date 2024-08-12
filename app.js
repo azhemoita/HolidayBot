@@ -16,7 +16,7 @@ bot.catch((err, ctx) => {
 });
 
 const getHolidayUrl = () =>
-  `https://www.calend.ru/img/export/informer_1.png?t=${date.getTime()}`;
+  `https://www.calend.ru/img/export/informer_1.png?t=${Math.random()}`;
 
 const sendHoliday = () => {
   bot.telegram.sendPhoto(chatId, getHolidayUrl());

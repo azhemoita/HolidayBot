@@ -1,23 +1,23 @@
 {
-    "name": "holiday-telegram-robot",
-    "version": "1.1.0",
-    "description": "My first telegram robot",
-    "main": "index.js",
-    "scripts": {
-        "start": "node app",
-        "dev": "nodemon app"
-    },
-    "keywords": [
-        "npm"
-    ],
-    "author": "Zhemoita Aliaksei",
-    "license": "ISC",
-    "dependencies": {
-        "dotenv": "^16.4.5",
-        "node-cron": "^3.0.3",
-        "telegraf": "^4.16.3"
-    },
-    "devDependencies": {
-        "nodemon": "^3.1.0"
-    }
+  "name": "holiday-telegram-robot",
+  "version": "1.1.1",
+  "description": "My first telegram robot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "Zhemoita Aliaksei",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
 }
